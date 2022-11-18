@@ -1,7 +1,7 @@
-import axios, { type AxiosResponse } from 'axios';
+import axios, { type AxiosRequestHeaders, type AxiosResponse } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import pinia from '@/stores/index';
 import { useUserInfoStore } from '../stores/userInfo';
+
 
 /* 定义response对象的data接口 */
 interface ResponseData<T> {
@@ -19,6 +19,15 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
 	(config) => {
+		//这里用的token其实是我们存储在本地的token
+		let token = useUserInfoStore().token  //把token从仓库搞过来,赋值给请求拦截器里的token
+		if(token){
+			//每次发送,判断本地是否有token,有的话放在请求头发送请求头
+
+			//如果没有就不发送了
+			(config.headers as AxiosRequestHeaders).token = token
+
+		}
     
 		return config;
 	}
@@ -40,7 +49,7 @@ service.interceptors.response.use(
 
 			// `token` 过期或者账号已在别处登录
       if (response.status===401) {
-        const storeUserInfo = useUserInfoStore(pinia)
+        const storeUserInfo = useUserInfoStore(pinna)
 				await storeUserInfo.reset()
 				window.location.href = '/' // 去登录页
 				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})

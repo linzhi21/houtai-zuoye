@@ -38,5 +38,15 @@ export default defineConfig((mode: ConfigEnv) => {
         ],
       },
     },
+    server: {
+      proxy: {
+        // 选项写法
+        '/app-dev': {
+          target: 'http://gmall-h5-api.atguigu.cn',//配置代理,解决跨域
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/app-dev/, '')
+        },
+      }
+    }
   };
 });

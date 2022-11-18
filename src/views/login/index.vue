@@ -121,7 +121,7 @@ const handleLogin = async () => {
   loading.value = true
   const {username, password} = loginForm.value
   try {
-    await userInfoStore.login(username, password)
+    await userInfoStore.login({username, password})
     router.push({ path: redirect.value || '/' })
   } finally {
     loading.value = false
@@ -144,9 +144,7 @@ $cursor: #fff;
 }
 /* reset element-ui css */
 .login-container {
-  background-image: url(../../assets/bg.jpg);
-  background-color: #2d3a4b;
-  background-size: cover;
+  
   .el-input {
     display: inline-block;
     height: 47px;
@@ -184,11 +182,16 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
+
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
 
 .login-container {
+  background-image: url(../../assets/bg.jpg);
+  background-color: #2d3a4b;
+  background-size: cover;
+
   min-height: 100%;
   width: 100%;
   background-color: $bg;
